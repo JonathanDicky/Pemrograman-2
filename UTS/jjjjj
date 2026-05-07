@@ -1,0 +1,120 @@
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.Stack;
+
+class Produk {
+    String nama;
+    int harga;
+
+    Produk(String nama, int harga) {
+        this.nama = nama;
+        this.harga = harga;
+    }
+
+    public String toString() {
+        return nama + " | Rp." + harga;
+    }
+}
+
+public class ManajemenProduk extends JFrame {
+
+    Stack<Produk> dataProduk = new Stack<>();
+
+    JTextField txtNama = new JTextField();
+    JTextField txtHarga = new JTextField();
+
+    JTextArea area = new JTextArea();
+
+    JButton btnTambah = new JButton("Tambah");
+    JButton btnHapus = new JButton("Hapus");
+
+    public ManajemenProduk() {
+
+        setTitle("Manajemen Produk");
+        setSize(400,400);
+        setLayout(null);
+
+        JLabel l1 = new JLabel("Nama Produk");
+        l1.setBounds(20,20,100,25);
+        add(l1);
+
+        txtNama.setBounds(130,20,150,25);
+        add(txtNama);
+
+        JLabel l2 = new JLabel("Harga");
+        l2.setBounds(20,60,100,25);
+        add(l2);
+
+        txtHarga.setBounds(130,60,150,25);
+        add(txtHarga);
+
+        btnTambah.setBounds(20,110,100,30);
+        add(btnTambah);
+
+        btnHapus.setBounds(140,110,100,30);
+        add(btnHapus);
+
+        area.setBounds(20,160,330,150);
+        add(area);
+
+        // Tombol Tambah
+        btnTambah.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                String nama = txtNama.getText();
+                int harga = Integer.parseInt(txtHarga.getText());
+
+                Produk p = new Produk(nama, harga);
+
+                dataProduk.push(p);
+
+                tampilData();
+
+                JOptionPane.showMessageDialog(null,
+                        "Produk ditambahkan");
+            }
+        });
+
+        // Tombol Hapus
+        btnHapus.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+
+                    dataProduk.pop();
+
+                    tampilData();
+
+                    JOptionPane.showMessageDialog(null,
+                            "Produk dihapus");
+
+                } catch(Exception ex) {
+
+                    JOptionPane.showMessageDialog(null,
+                            "Stack kosong");
+
+                }
+            }
+        });
+
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    void tampilData() {
+
+        area.setText("");
+
+        for(Produk p : dataProduk) {
+
+            area.append(p.toString()+"\n");
+
+        }
+    }
+
+    public static void main(String[] args) {
+
+        new ManajemenProduk();
+
+    }
+}
