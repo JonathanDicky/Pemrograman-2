@@ -1,0 +1,162 @@
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Stack;
+
+public class ManajemenProduk extends JFrame {
+
+    Stack<Product> stack = new Stack<>();
+
+    JTextField txtNama = new JTextField();
+    JTextField txtHarga = new JTextField();
+    JTextField txtKategori = new JTextField();
+    JTextField txtCari = new JTextField();
+
+    JTextArea area = new JTextArea();
+
+    JButton btnTambah = new JButton("Tambah");
+    JButton btnHapus = new JButton("Hapus");
+    JButton btnSorting = new JButton("Sorting Harga");
+    JButton btnCari = new JButton("Cari");
+
+    public ManajemenProduk() {
+
+        setTitle("Manajemen Produk");
+        setSize(500,500);
+        setLayout(null);
+
+        JLabel l1 = new JLabel("Nama");
+        l1.setBounds(20,20,100,25);
+        add(l1);
+
+        txtNama.setBounds(120,20,150,25);
+        add(txtNama);
+
+        JLabel l2 = new JLabel("Harga");
+        l2.setBounds(20,60,100,25);
+        add(l2);
+
+        txtHarga.setBounds(120,60,150,25);
+        add(txtHarga);
+
+        JLabel l3 = new JLabel("Kategori");
+        l3.setBounds(20,100,100,25);
+        add(l3);
+
+        txtKategori.setBounds(120,100,150,25);
+        add(txtKategori);
+
+        btnTambah.setBounds(20,150,100,30);
+        add(btnTambah);
+
+        btnHapus.setBounds(140,150,100,30);
+        add(btnHapus);
+
+        btnSorting.setBounds(260,150,150,30);
+        add(btnSorting);
+
+        area.setBounds(20,200,440,150);
+        add(area);
+
+        txtCari.setBounds(20,370,150,25);
+        add(txtCari);
+
+        btnCari.setBounds(190,370,100,25);
+        add(btnCari);
+
+        // TAMBAH
+        btnTambah.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                String nama = txtNama.getText();
+                int harga = Integer.parseInt(txtHarga.getText());
+                String kategori = txtKategori.getText();
+
+                Product p = new Product(nama, harga, kategori);
+
+                stack.push(p);
+
+                tampilData();
+
+                JOptionPane.showMessageDialog(null,
+                        "Produk berhasil ditambah");
+            }
+        });
+
+        // HAPUS
+        btnHapus.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+
+                    stack.pop();
+
+                    tampilData();
+
+                    JOptionPane.showMessageDialog(null,
+                            "Produk berhasil dihapus");
+
+                } catch (Exception ex) {
+
+                    JOptionPane.showMessageDialog(null,
+                            "Stack kosong!");
+
+                }
+            }
+        });
+
+        // SORTING
+        btnSorting.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                Collections.sort(stack, new Comparator<Product>() {
+                    public int compare(Product a, Product b) {
+                        return a.harga - b.harga;
+                    }
+                });
+
+                tampilData();
+            }
+        });
+
+        // SEARCHING
+        btnCari.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                String cari = txtCari.getText();
+
+                area.setText("");
+
+                for(Product p : stack) {
+
+                    if(p.nama.equalsIgnoreCase(cari)) {
+
+                        area.append(p.toString()+"\n");
+
+                    }
+                }
+            }
+        });
+
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    void tampilData() {
+
+        area.setText("");
+
+        for(Product p : stack) {
+
+            area.append(p.toString()+"\n");
+
+        }
+    }
+
+    public static void main(String[] args) {
+
+        new ManajemenProduk();
+
+    }
+}
